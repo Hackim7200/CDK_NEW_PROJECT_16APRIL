@@ -1,5 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { JsonError } from "../validators/TodoValidator";
+import { JsonError } from "../todo/TodoValidator";
 
 /** Parses request body: accepts string (JSON) or already-parsed object (e.g. from API Gateway). */
 export function parseJson(arg: any) {

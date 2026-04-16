@@ -27,13 +27,13 @@ export class LambdaStack extends Stack {
     const todosLambda = new NodejsFunction(this, "TodosLambda", {
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
+      bundling: { forceDockerBundling: false },
       entry: join(
         __dirname,
         "..",
-        "..",
         "services",
-        "lambdas",
         "todo",
+        "lambda",
         "handler.ts",
       ),
       environment: {
@@ -62,13 +62,13 @@ export class LambdaStack extends Stack {
     const profileLambda = new NodejsFunction(this, "ProfileLambda", {
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
+      bundling: { forceDockerBundling: false },
       entry: join(
         __dirname,
         "..",
-        "..",
         "services",
-        "lambdas",
         "profile",
+        "lambda",
         "handler.ts",
       ),
       environment: {
@@ -97,13 +97,13 @@ export class LambdaStack extends Stack {
     const cleanupLambda = new NodejsFunction(this, "CleanupOldTodosLambda", {
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
+      bundling: { forceDockerBundling: false },
       entry: join(
         __dirname,
         "..",
-        "..",
         "services",
-        "lambdas",
         "todo",
+        "lambda",
         "CleanupOldTodos.ts",
       ),
       environment: {

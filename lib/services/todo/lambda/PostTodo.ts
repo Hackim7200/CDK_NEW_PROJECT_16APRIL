@@ -1,6 +1,6 @@
 import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
-import { v4 } from "uuid";
+import { randomUUID } from "node:crypto";
 import { validateAsTodoEntry } from "../TodoValidator";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { parseJson } from "../../shared/Utils";
@@ -16,7 +16,7 @@ export async function postTodo(
 
   // Build PK + SK for single-table
   const PK = `USER#${body.userId}`; // userId must be in payload or from auth
-  const itemId = v4(); // Generate a random id for the item.
+  const itemId = randomUUID(); // Generate a random id for the item.
   const SK = `ITEM#TODO#${body.date}#${itemId}`; // this structure is important when listing all the todos for a given date
 
   validateAsTodoEntry(body);

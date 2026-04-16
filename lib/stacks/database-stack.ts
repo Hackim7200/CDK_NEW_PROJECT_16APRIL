@@ -1,19 +1,34 @@
-import * as cdk from 'aws-cdk-lib';
-import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
-import { Construct } from 'constructs';
+import { Stack, StackProps } from "aws-cdk-lib";
+import {
+  AttributeType,
+  Table as DynamoDBTable,
+  ITable,
+} from "aws-cdk-lib/aws-dynamodb";
+import { Construct } from "constructs";
 
-export class DatabaseStack extends cdk.Stack {
-  public readonly table: dynamodb.Table;
+interface DataStackProps extends StackProps {
+  appName: string;
+}
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export class DataStack extends Stack {
+  /** Single table for all entities (todos) using PK/SK access patterns */
+  public readonly userItemsTable: ITable;
+
+  constructor(scope: Construct, id: string, props: DataStackProps) {
     super(scope, id, props);
 
-    this.table = new dynamodb.Table(this, 'TodosTable', {
-      partitionKey: { name: 'userId', type: dynamodb.AttributeType.STRING },
-      sortKey:      { name: 'todoId', type: dynamodb.AttributeType.STRING },
-      billingMode:  dynamodb.BillingMode.PAY_PER_REQUEST,
-      encryption:   dynamodb.TableEncryption.AWS_MANAGED,
-      pointInTimeRecovery: true,
-      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    const { appName } = props;
+
+    this.userItemsTable = new DynamoDBTable(this, "UserItemsTable", {
+      partitionKey: {
+        name: "PK",
+        type: AttributeType.STRING,
+      },
+      sortKey: {
+        name: "SK",
+        type: AttributeType.STRING,
+      },
+      tableName: `${appName}-UserItems`,
     });
   }
+}

@@ -8,7 +8,7 @@ import { postTodo } from "./PostTodo";
 import { getTodos } from "./GetTodos";
 import { updateTodo } from "./UpdateTodo";
 import { deleteTodo } from "./DeleteTodo";
-import { JsonError, MissingFieldsError } from "../../validators/TodoValidator";
+import { JsonError, MissingFieldsError } from "../TodoValidator";
 import { addCorsHeader } from "../../shared/Utils";
 
 const ddbClient = new DynamoDBClient({});

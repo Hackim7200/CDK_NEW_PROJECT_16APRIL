@@ -1,7 +1,7 @@
 import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { v4 } from "uuid";
-import { validateAsTodoEntry } from "../../validators/TodoValidator";
+import { validateAsTodoEntry } from "../TodoValidator";
 import { marshall } from "@aws-sdk/util-dynamodb";
 import { parseJson } from "../../shared/Utils";
 

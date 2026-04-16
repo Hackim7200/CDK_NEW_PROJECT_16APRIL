@@ -10,7 +10,7 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 const MAX_DELETES_PER_BATCH = 25;
 
 /**
- * Wipes this user’s app data from our database (todos, events, pomodoros, and anything
+ * Wipes this user’s app data from our database (todos and anything
  * else stored under their user partition).
  *
  * This does **not** remove their login account in Cognito—that is handled separately
@@ -62,7 +62,7 @@ export async function deleteUserData(
   const userId = tokenSub;
 
   const tableName = process.env.TABLE_NAME!;
-  // Everything for one user lives under this partition key (matches how we save todos and events).
+  // Everything for one user lives under this partition key (matches how we save todos).
   const userPartitionKey = `USER#${userId}`;
 
   // DynamoDB returns at most ~1MB of rows per Query; this cursor fetches the next page (separate from the 25-delete batch limit below).

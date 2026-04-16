@@ -28,14 +28,7 @@ export class LambdaStack extends Stack {
       runtime: Runtime.NODEJS_20_X,
       handler: "handler",
       bundling: { forceDockerBundling: false },
-      entry: join(
-        __dirname,
-        "..",
-        "services",
-        "todo",
-        "lambda",
-        "handler.ts",
-      ),
+      entry: join(__dirname, "..", "services", "todo", "lambda", "handler.ts"),
       environment: {
         TABLE_NAME: table.tableName,
       },

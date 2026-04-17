@@ -1,0 +1,126 @@
+CURSOR RULES (GLOBAL SYSTEM PROMPT)
+
+1. CORE PRINCIPLES
+- Prioritise simplicity, clarity, and maintainability over cleverness
+- Avoid overengineering and premature abstraction
+- Prefer existing patterns in the codebase over introducing new ones
+- Write code that is easy to read, test, and modify
+- Optimise for long-term maintainability, not short-term elegance
+
+2. EXECUTION WORKFLOW
+When completing a task:
+- Understand requirements and inspect existing code first
+- If anything is unclear, ask clarifying questions
+- Identify the smallest correct change to achieve the goal
+- For non-trivial tasks, outline an approach before coding
+- Implement incrementally (avoid large, monolithic changes)
+- Validate changes against existing patterns and constraints
+
+3. CHANGE SAFETY RULES
+- Do not modify unrelated code
+- Keep changes minimal and scoped
+- Do not refactor unless explicitly required or directly improving the task area
+- Do not rename APIs, functions, or files without necessity
+- Preserve existing behaviour unless explicitly asked to change it
+- Avoid full-file rewrites unless required
+
+4. CODE QUALITY STANDARDS
+- Code must be readable without requiring external explanation
+- Use clear, descriptive naming
+- Keep functions small and single-purpose
+- Avoid deep nesting and overly complex logic
+- Prefer composition over inheritance
+- Avoid unnecessary abstraction
+
+5. ARCHITECTURE RULES
+- Follow existing architecture patterns in the codebase
+- Do not introduce new architectural patterns without justification
+- Abstraction is only allowed when there are at least 2 clear use cases
+- Keep modules feature-focused and self-contained
+- Separate UI, business logic, and data access layers where applicable
+- Prefer modular, decoupled design
+
+6. STATE & DATA FLOW RULES
+- Keep state management consistent across the project
+- Avoid duplicated or conflicting sources of truth
+- Prefer unidirectional data flow
+- Isolate side effects in services or dedicated layers
+- Keep UI components as stateless as practical
+
+7. DEPENDENCY RULES
+- Do not add new dependencies without justification
+- Prefer built-in or native framework solutions first
+- Only use well-maintained, widely adopted libraries
+- Avoid duplicate libraries solving the same problem
+- Do not introduce experimental dependencies without explicit need
+
+8. ERROR HANDLING RULES
+- Handle expected failures explicitly
+- Never silently ignore errors
+- Log errors with meaningful context
+- Ensure graceful degradation in UI or API responses
+- Prefer typed or structured error handling where possible
+
+9. TESTING & RELIABILITY
+- Write code with testability in mind
+- Separate logic from UI to enable unit testing
+- Add tests for bug fixes to prevent regression
+- Prefer simple unit tests over complex test setups
+
+10. PERFORMANCE RULES
+- Do not optimise prematurely
+- Prefer readability over micro-optimisations
+- Only optimise when there is clear evidence or need
+- Avoid unnecessary memoisation, caching, or complexity
+
+11. TERMINAL RULES
+- Always provide commands instead of executing them
+- Explain what each command does before suggesting it
+- Avoid destructive commands unless explicitly required
+- Prefer safe, reversible operations
+
+12. ANTI-PATTERNS
+Never:
+- Overengineer simple problems
+- Introduce unnecessary abstractions
+- Create large monolithic files or classes
+- Mix UI, business logic, and data layers
+- Modify unrelated code
+- Remove or rewrite working logic without necessity
+
+13. CONSISTENCY RULES
+- Match existing code style and patterns
+- Do not introduce new conventions unless migrating intentionally
+- Keep naming, structure, and patterns consistent across modules
+- Respect existing folder and feature boundaries
+
+14. DOCUMENTATION & COMMENTS
+- Do not remove existing comments unless code is removed
+- Comments should explain WHY, not WHAT
+- Keep comments minimal and meaningful
+- Document non-obvious decisions only
+
+15. KNOWLEDGE CAPTURE
+If a solution required significant debugging or insight:
+
+Add it to MyKnowledgeBase.txt in the project root
+
+Format:
+<Topic Title>
+- Insight
+- Root cause
+- Lesson learned
+
+16. FILE RESPONSIBILITY RULES
+- Each file must have a single clear responsibility
+- Split files when they grow beyond a focused concern
+- Avoid utility dumping grounds
+- Shared code must be genuinely reusable
+
+17. FINAL RULE
+Code should always be:
+- easy to read
+- easy to change
+- safe to extend
+
+If a solution feels complex → simplify it.

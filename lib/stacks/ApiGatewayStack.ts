@@ -11,21 +11,22 @@ import {
 import { IUserPool } from "aws-cdk-lib/aws-cognito";
 import { Construct } from "constructs";
 
-interface ApiStackProps extends StackProps {
+interface ApiGatewayStackProps extends StackProps {
+  appName: string;
   todosLambdaIntegration: LambdaIntegration;
   profileLambdaIntegration: LambdaIntegration;
   userPool: IUserPool;
 }
 
-export class ApiStack extends Stack {
-  constructor(scope: Construct, id: string, props: ApiStackProps) {
+export class ApiGatewayStack extends Stack {
+  constructor(scope: Construct, id: string, props: ApiGatewayStackProps) {
     super(scope, id, props);
 
-    const api = new RestApi(this, "CountdownApi"); // Create a REST API named CountdownApi.
+    const api = new RestApi(this, `${props.appName}Api`); // Create a REST API named CountdownApi.
 
     const authorizer = new CognitoUserPoolsAuthorizer(
       this,
-      "CountdownApiAuthorizer",
+      `${props.appName}ApiAuthorizer`,
       {
         cognitoUserPools: [props.userPool],
         identitySource: "method.request.header.Authorization",

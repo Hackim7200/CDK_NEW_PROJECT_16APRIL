@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib/core";
-import { ApiStack } from "../lib/stacks/api-stack";
-import { AuthStack } from "../lib/stacks/auth-stack";
-import { DataStack } from "../lib/stacks/database-stack";
-import { LambdaStack } from "../lib/stacks/lambda-stack";
+import { ApiGatewayStack } from "../lib/stacks/ApiGatewayStack";
+import { AuthStack } from "../lib/stacks/AuthStack";
+import { DynamodbStack } from "../lib/stacks/DynamodbStack";
+import { LambdaStack } from "../lib/stacks/LambdaStack";
 
 const app = new cdk.App();
 
@@ -12,22 +12,24 @@ const env = {
   region: process.env.CDK_DEFAULT_REGION,
 };
 
-const appName = `PomodoroPlans`; 
+const appName = `PomodoroPlans`;
 
 const auth = new AuthStack(app, `AuthStack-${appName}`, { env, appName });
-const database = new DataStack(app, `DatabaseStack-${appName}`, {
+
+const dynamodb = new DynamodbStack(app, `DynamoDBStack-${appName}`, {
   env,
   appName,
 });
 
-const compute = new LambdaStack(app, `ComputeStack-${appName}`, {
+const lambdas = new LambdaStack(app, `LambdaStack-${appName}`, {
   env,
-  userItemsTable: database.userItemsTable,
+  userItemsTable: dynamodb.todoTable,
 });
 
-new ApiStack(app, `ApiStack-${appName}`, {
+const apiGateway = new ApiGatewayStack(app, `ApiGatewayStack-${appName}`, {
   env,
-  todosLambdaIntegration: compute.todosLambdaIntegration,
-  profileLambdaIntegration: compute.profileLambdaIntegration,
+  appName,
+  todosLambdaIntegration: lambdas.todosLambdaIntegration,
+  profileLambdaIntegration: lambdas.profileLambdaIntegration,
   userPool: auth.userPool,
 });

@@ -20,7 +20,7 @@ interface AuthStackProps extends StackProps {
 
 export class AuthStack extends Stack {
   public userPool: UserPool;
-  public userPoolClient: UserPoolClient; // public so it can be used in the WebSocketStack
+  private userPoolClient: UserPoolClient; // public so it can be used in the WebSocketStack
   private identityPool: CfnIdentityPool;
   private authenticatedRole: Role;
   private unAuthenticatedRole: Role;

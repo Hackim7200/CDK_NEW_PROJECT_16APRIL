@@ -6,20 +6,22 @@ import {
 } from "aws-cdk-lib/aws-dynamodb";
 import { Construct } from "constructs";
 
-interface DataStackProps extends StackProps {
+interface DynamodbStackProps extends StackProps {
   appName: string;
 }
 
-export class DataStack extends Stack {
+export class DynamodbStack extends Stack {
   /** Single table for all entities (todos) using PK/SK access patterns */
-  public readonly userItemsTable: ITable;
+  public readonly todoTable: ITable;
 
-  constructor(scope: Construct, id: string, props: DataStackProps) {
+  constructor(scope: Construct, id: string, props: DynamodbStackProps) {
     super(scope, id, props);
 
     const { appName } = props;
 
-    this.userItemsTable = new DynamoDBTable(this, "UserItemsTable", {
+
+    //Todos Table
+    this.todoTable = new DynamoDBTable(this, `${appName}-TodosTable`, {
       partitionKey: {
         name: "PK",
         type: AttributeType.STRING,
@@ -28,7 +30,10 @@ export class DataStack extends Stack {
         name: "SK",
         type: AttributeType.STRING,
       },
-      tableName: `${appName}-UserItems`,
+      tableName: `${appName}-Todos`,
     });
+
+
+    
   }
 }

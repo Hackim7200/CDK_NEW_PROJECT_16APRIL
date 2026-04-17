@@ -1,0 +1,4 @@
+# Minimal schema so the API can be deployed; extend with types and resolvers as needed.
+type Query {
+  _placeholder: String
+}

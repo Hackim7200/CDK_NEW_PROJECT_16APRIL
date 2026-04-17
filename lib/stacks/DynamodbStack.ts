@@ -36,4 +36,5 @@ export class DynamodbStack extends Stack {
 
     
   }
+  
 }

@@ -1,13 +1,13 @@
 type Query {
-	getTodo(id: String!): Todo! @aws_cognito_user_pools
+	getTodo(id: String!): Todo! @aws_api_key @aws_cognito_user_pools
 	listTodos(limit: Int, nextToken: String): PaginatedTodos!
-		@aws_cognito_user_pools
+		@aws_api_key @aws_cognito_user_pools
 }
 
 type Mutation {
-	createTodo(input: CreateTodoInput!): Todo! @aws_cognito_user_pools
-	updateTodo(input: UpdateTodoInput!): Todo! @aws_cognito_user_pools
-	deleteTodo(id: String!): Todo! @aws_cognito_user_pools
+	createTodo(input: CreateTodoInput!): Todo! @aws_api_key @aws_cognito_user_pools
+	updateTodo(input: UpdateTodoInput!): Todo! @aws_api_key @aws_cognito_user_pools
+	deleteTodo(id: String!): Todo! @aws_api_key @aws_cognito_user_pools
 }
 
 input CreateTodoInput {

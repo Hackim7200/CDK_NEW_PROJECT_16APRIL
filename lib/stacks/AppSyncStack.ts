@@ -1,8 +1,10 @@
-import { Stack, StackProps } from "aws-cdk-lib";
+import { CfnOutput, Duration, Expiration, Stack, StackProps } from "aws-cdk-lib";
 import {
   AuthorizationType,
+  Code,
   Definition,
   FieldLogLevel,
+  FunctionRuntime,
   GraphqlApi,
 } from "aws-cdk-lib/aws-appsync";
 import { IUserPool } from "aws-cdk-lib/aws-cognito";
@@ -22,9 +24,11 @@ export class AppSyncStack extends Stack {
 
     // Same pool and client pattern as ApiGatewayStack: Cognito JWT in `Authorization` (typically the ID token).
     // AppSync uses USER_POOL auth instead of RestApi + CognitoUserPoolsAuthorizer.
-    new GraphqlApi(this, `${props.appName}-AppSyncApi`, {
+    const api = new GraphqlApi(this, `${props.appName}-AppSyncApi`, {
       name: `${props.appName}-AppSyncApi`,
-      definition: Definition.fromFile(path.join(__dirname, "schema.graphql")),
+      definition: Definition.fromFile(
+        path.join(__dirname, "graphql/schema.graphql"),
+      ),
       authorizationConfig: {
         defaultAuthorization: {
           authorizationType: AuthorizationType.USER_POOL,
@@ -32,11 +36,75 @@ export class AppSyncStack extends Stack {
             userPool: props.userPool,
           },
         },
+        // API key auth for local / tool testing (send header `x-api-key: <key>`).
+        additionalAuthorizationModes: [
+          {
+            authorizationType: AuthorizationType.API_KEY,
+            apiKeyConfig: {
+              expires: Expiration.after(Duration.days(365)),
+            },
+          },
+        ],
       },
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
       },
       xrayEnabled: true,
+    });
+    // Add the Datasource that my resolvers will make use of
+    const todosDS = api.addDynamoDbDataSource("TodoDS", props.todoTable);
+
+    const todoResolversDir = path.join(__dirname, "../services/todo/resolvers");
+
+    // Add the resolvers that will make use of the datasource
+    api.createResolver("getTodoResolver", {
+      typeName: "Query",
+      fieldName: "getTodo",
+      dataSource: todosDS,
+      runtime: FunctionRuntime.JS_1_0_0,
+      code: Code.fromAsset(path.join(todoResolversDir, "getTodo.js")),
+    });
+
+    api.createResolver("listTodosResolver", {
+      typeName: "Query",
+      fieldName: "listTodos",
+      dataSource: todosDS,
+      runtime: FunctionRuntime.JS_1_0_0,
+      code: Code.fromAsset(path.join(todoResolversDir, "listTodos.js")),
+    });
+
+    api.createResolver("createTodoResolver", {
+      typeName: "Mutation",
+      fieldName: "createTodo",
+      dataSource: todosDS,
+      runtime: FunctionRuntime.JS_1_0_0,
+      code: Code.fromAsset(path.join(todoResolversDir, "createTodo.js")),
+    });
+
+    api.createResolver("updateTodoResolver", {
+      typeName: "Mutation",
+      fieldName: "updateTodo",
+      dataSource: todosDS,
+      runtime: FunctionRuntime.JS_1_0_0,
+      code: Code.fromAsset(path.join(todoResolversDir, "updateTodo.js")),
+    });
+
+    api.createResolver("deleteTodoResolver", {
+      typeName: "Mutation",
+      fieldName: "deleteTodo",
+      dataSource: todosDS,
+
+      runtime: FunctionRuntime.JS_1_0_0,
+      code: Code.fromAsset(path.join(todoResolversDir, "deleteTodo.js")),
+    });
+
+    new CfnOutput(this, "AppSyncGraphqlUrl", {
+      value: api.graphqlUrl,
+      description: "AppSync GraphQL HTTPS endpoint",
+    });
+    new CfnOutput(this, "AppSyncApiKey", {
+      value: api.apiKey ?? "",
+      description: "AppSync API key for testing (x-api-key header)",
     });
   }
 }

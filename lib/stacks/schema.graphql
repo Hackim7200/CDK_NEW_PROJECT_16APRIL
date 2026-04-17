@@ -1,4 +1,39 @@
-# Minimal schema so the API can be deployed; extend with types and resolvers as needed.
 type Query {
-  _placeholder: String
+	getTodo(id: String!): Todo! @aws_cognito_user_pools
+	listTodos(limit: Int, nextToken: String): PaginatedTodos!
+		@aws_cognito_user_pools
+}
+
+type Mutation {
+	createTodo(input: CreateTodoInput!): Todo! @aws_cognito_user_pools
+	updateTodo(input: UpdateTodoInput!): Todo! @aws_cognito_user_pools
+	deleteTodo(id: String!): Todo! @aws_cognito_user_pools
+}
+
+input CreateTodoInput {
+	title: String!
+	description: String!
+	isCompleted: Boolean!
+}
+
+input UpdateTodoInput {
+	id: ID!
+	title: String!
+	description: String!
+	isCompleted: Boolean!
+}
+
+type Todo {
+	id: ID!
+	title: String!
+	description: String!
+	isCompleted: Boolean!
+	owner: String!
+	createdAt: AWSDateTime!
+	updatedAt: AWSDateTime!
+}
+
+type PaginatedTodos {
+	todos: [Todo!]!
+	nextToken: String
 }

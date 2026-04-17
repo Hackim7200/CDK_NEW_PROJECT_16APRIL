@@ -2,28 +2,6 @@ import { DynamoDBClient, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { APIGatewayProxyEvent, APIGatewayProxyResult } from "aws-lambda";
 import { unmarshall } from "@aws-sdk/util-dynamodb";
 
-// this function is used to get the pomodoro count for a given todo
-// since there is no JOIN in DynamoDB we have to query the pomodoros table separately
-// We are using UserID and TodoID to query the pomodoros table
-async function getPomodoroCount(
-  ddbClient: DynamoDBClient,
-  pk: string,
-  todoId: string,
-): Promise<number> {
-  const result = await ddbClient.send(
-    new QueryCommand({
-      TableName: process.env.TABLE_NAME,
-      KeyConditionExpression: "PK = :pk AND begins_with(SK, :skPrefix)",
-      ExpressionAttributeValues: {
-        ":pk": { S: pk },
-        ":skPrefix": { S: `ITEM#POMODORO#${todoId}` },
-      },
-      Select: "COUNT",
-    }),
-  );
-  return result.Count ?? 0;
-}
-
 export async function getTodos(
   event: APIGatewayProxyEvent,
   ddbClient: DynamoDBClient,
@@ -66,8 +44,6 @@ export async function getTodos(
       };
     }
     const item = unmarshall(items[0]);
-    // Attach the pomodoro count for this single todo
-    item.pomodoros = await getPomodoroCount(ddbClient, PK, item.id);
     return {
       statusCode: 200,
       body: JSON.stringify(item),
@@ -89,18 +65,8 @@ export async function getTodos(
     unmarshall(item),
   );
 
-  // For each todo, fetch its pomodoro count in parallel using Promise.all.
-  // Each todo gets a separate COUNT query because pomodoros live under
-  // a different SK prefix and can't be included in the todos query above.
-  const itemsWithCounts = await Promise.all(
-    unmarshalledItems.map(async (todo) => ({
-      ...todo,
-      pomodoros: await getPomodoroCount(ddbClient, PK, todo.id),
-    })),
-  );
-
   return {
     statusCode: 200,
-    body: JSON.stringify(itemsWithCounts),
+    body: JSON.stringify(unmarshalledItems),
   };
 }

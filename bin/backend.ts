@@ -4,6 +4,7 @@ import { ApiGatewayStack } from "../lib/stacks/ApiGatewayStack";
 import { AuthStack } from "../lib/stacks/AuthStack";
 import { DynamodbStack } from "../lib/stacks/DynamodbStack";
 import { LambdaStack } from "../lib/stacks/LambdaStack";
+import { AppSyncStack } from "../lib/stacks/AppSyncStack";
 
 const app = new cdk.App();
 
@@ -31,5 +32,12 @@ const apiGateway = new ApiGatewayStack(app, `ApiGatewayStack-${appName}`, {
   appName,
   todosLambdaIntegration: lambdas.todosLambdaIntegration,
   profileLambdaIntegration: lambdas.profileLambdaIntegration,
+  userPool: auth.userPool,
+});
+
+const appSync = new AppSyncStack(app, `AppSyncStack-${appName}`, {
+  env,
+  appName,
+  todoTable: dynamodb.todoTable,
   userPool: auth.userPool,
 });

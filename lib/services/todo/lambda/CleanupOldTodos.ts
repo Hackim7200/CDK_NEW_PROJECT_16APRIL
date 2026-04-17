@@ -8,7 +8,7 @@ import { unmarshall } from "@aws-sdk/util-dynamodb";
 const ddbClient = new DynamoDBClient({});
 
 /**
- * Scheduled Lambda that deletes all todos (and their pomodoros) with a date
+ * Scheduled Lambda that deletes all todos with a date
  * older than today. Runs via EventBridge cron — no API Gateway involved.
  *
  * Scans for all TODO items, parses the date attribute, and removes any whose
@@ -25,7 +25,6 @@ export async function handler(): Promise<void> {
 
   let lastEvaluatedKey: Record<string, any> | undefined;
   let deletedTodos = 0;
-  let deletedPomodoros = 0;
 
   do {
     const scanResult = await ddbClient.send(
@@ -47,31 +46,13 @@ export async function handler(): Promise<void> {
 
     for (const todo of items) {
       const pk = todo.PK as string;
-      const todoId = todo.id as string;
 
-      // Find all pomodoros for this todo
-      const pomodoroScan = await ddbClient.send(
-        new ScanCommand({
-          TableName: tableName,
-          FilterExpression: "PK = :pk AND begins_with(SK, :skPrefix)",
-          ExpressionAttributeValues: {
-            ":pk": { S: pk },
-            ":skPrefix": { S: `ITEM#POMODORO#${todoId}` },
-          },
-          ProjectionExpression: "PK, SK",
-        }),
-      );
-
-      // Collect all keys to delete: the todo + its pomodoros
+      // Only delete the todo itself, 
       const keysToDelete = [
         { PK: { S: pk }, SK: { S: todo.SK as string } },
-        ...(pomodoroScan.Items ?? []).map((p) => ({
-          PK: p.PK!,
-          SK: p.SK!,
-        })),
       ];
 
-      // Batch delete in chunks of 25
+      // Batch delete in chunks of 25 (though only 1 here)
       for (let i = 0; i < keysToDelete.length; i += 25) {
         const chunk = keysToDelete.slice(i, i + 25);
         await ddbClient.send(
@@ -85,12 +66,11 @@ export async function handler(): Promise<void> {
         );
       }
 
-      deletedPomodoros += (pomodoroScan.Items ?? []).length;
       deletedTodos++;
     }
   } while (lastEvaluatedKey);
 
   console.log(
-    `Cleanup complete: ${deletedTodos} todo(s) and ${deletedPomodoros} pomodoro(s) deleted`,
+    `Cleanup complete: ${deletedTodos} todo(s) deleted`,
   );
 }

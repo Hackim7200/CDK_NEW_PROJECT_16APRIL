@@ -37,3 +37,17 @@ type PaginatedTodos {
   todos: [Todo!]!
   nextToken: String
 }
+
+## What is nextToken?
+// What is nextToken?
+// The listTodos query may have too many results to return at once. To avoid slow and expensive requests,
+// the API returns one "page" (up to the limit you set) at a time.
+//
+// nextToken is a marker that tells you there are more pages of todos.
+// - On your first request, call listTodos with a limit (e.g., 10) and either omit nextToken or set it to null.
+// - The response will include a list of todos, and possibly a nextToken string.
+//   - If nextToken is null or missing: you’re done—there are no more todos.
+//   - If nextToken is a string: use it in your next call to listTodos to get the next page, using the same limit.
+//
+// nextToken is only for pagination—asking for the "next chunk" of results.
+// It isn’t used for sorting or filtering by itself.

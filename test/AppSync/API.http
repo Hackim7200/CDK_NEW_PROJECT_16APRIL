@@ -1,3 +1,6 @@
+# AppSync GraphQL — REST Client / httpYac
+# Copy AppSyncGraphQlUrl from CDK outputs into @url. Use Cognito ID token (token_use=id) as @token.
+
 @url = https://d2ajcwzd35bstjzzsevh3nzday.appsync-api.eu-west-2.amazonaws.com/graphql
 @token = eyJraWQiOiJJMGhPS1F3RmxhUEN0bms4YTBzK0NSeXJtNDA0cVIzUlRJS1o1alBoRzkwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhNjcyZTIyNC1hMDExLTcwYjktMDljYy04YjJjNjZmYzkzMzciLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LXdlc3QtMi5hbWF6b25hd3MuY29tXC9ldS13ZXN0LTJfaXVRTERRUGdqIiwiY29nbml0bzp1c2VybmFtZSI6ImE2NzJlMjI0LWEwMTEtNzBiOS0wOWNjLThiMmM2NmZjOTMzNyIsIm9yaWdpbl9qdGkiOiI3ZWEwZWQ1Yi0xOTlkLTRhNWUtOGU5OC00ODNlMjFmZDkzYjgiLCJhdWQiOiI3NTU5cjd0dW42bHZnbWZxc2R2am5pMmRzIiwiZXZlbnRfaWQiOiIyNTg1NjZhOS1hYWViLTRhOTctYmY1Zi1lMDYwNTQ1YzZkOWQiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTc3NjY5OTAwNSwiZXhwIjoxNzc2NzAyNjA1LCJpYXQiOjE3NzY2OTkwMDUsImp0aSI6IjVhMDZhZDdiLTk3ODAtNDcwZC1hZmQ4LTQ4MmQyN2Q1Yzk3NCIsImVtYWlsIjoiaGlrbWF0aGFraW0uZGV2QGdtYWlsLmNvbSJ9.J3YbBWWy4IvF0izGcWclLIEU-UujmUV4lUJg2CLxBtswOaemnX7xBjwzeIM1-f3ip5QluxRIn9zwoItMOY3pNIhvhNj3SVUFHpzBStouvcNnfBqwCtXgiW2ZJbqtIPzHB-p9IeSHBTdhe7k6oNluudTQ7zgZDbwM8e9jAGwGLGzH9TuZgjP1y6vXmZ3Qp-dkErJNGb_HyKibDevuo7wF0-wCUdjQDU3NppgH1d2yKHMJEegRycVowY_nQIsNntB4WzLzGbb5ElQ5rgc7-HftefGSusJusjgqZDt6HS1M_1bXZnmcDYP6GioonM1XUoQ-pnnink0CpEKJyZW8hh5XrQ
 
@@ -18,7 +21,7 @@ Authorization: Bearer {{token}}
   }
 }
 
-### Get one todo by id
+### Get one todo by id (replace id from create or list response)
 POST {{url}}
 Content-Type: application/json
 Accept: application/json
@@ -42,5 +45,36 @@ Authorization: Bearer {{token}}
   "variables": {
     "limit": 10,
     "nextToken": null
+  }
+}
+
+### Update todo (replace id with a real todo id)
+POST {{url}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation UpdateTodo($input: UpdateTodoInput!) { updateTodo(input: $input) { id title description isCompleted owner createdAt updatedAt } }",
+  "variables": {
+    "input": {
+      "id": "00000000-0000-4000-8000-000000000000",
+      "title": "Updated title",
+      "description": "Updated from REST Client",
+      "isCompleted": true
+    }
+  }
+}
+
+### Delete todo (replace id with a real todo id)
+POST {{url}}
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer {{token}}
+
+{
+  "query": "mutation DeleteTodo($id: String!) { deleteTodo(id: $id) { id title description isCompleted owner createdAt updatedAt } }",
+  "variables": {
+    "id": "00000000-0000-4000-8000-000000000000"
   }
 }

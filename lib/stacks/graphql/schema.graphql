@@ -10,6 +10,14 @@ type Mutation {
   deleteTodo(id: String!): Todo! @aws_cognito_user_pools
 }
 
+# Subscriptions use the AppSync realtime WebSocket endpoint (see stack output AppSyncRealtimeUrl).
+# Pass owner = Cognito user sub so you only receive todos for that user (matches mutation results).
+type Subscription {
+  onTodoChanged(owner: String!): Todo!
+    @aws_subscribe(mutations: ["createTodo", "updateTodo", "deleteTodo"])
+    @aws_cognito_user_pools
+}
+
 input CreateTodoInput {
   title: String!
   description: String!
@@ -38,16 +46,15 @@ type PaginatedTodos {
   nextToken: String
 }
 
-## What is nextToken?
-// What is nextToken?
-// The listTodos query may have too many results to return at once. To avoid slow and expensive requests,
-// the API returns one "page" (up to the limit you set) at a time.
-//
-// nextToken is a marker that tells you there are more pages of todos.
-// - On your first request, call listTodos with a limit (e.g., 10) and either omit nextToken or set it to null.
-// - The response will include a list of todos, and possibly a nextToken string.
-//   - If nextToken is null or missing: you’re done—there are no more todos.
-//   - If nextToken is a string: use it in your next call to listTodos to get the next page, using the same limit.
-//
-// nextToken is only for pagination—asking for the "next chunk" of results.
-// It isn’t used for sorting or filtering by itself.
+# What is nextToken?
+# The listTodos query may have too many results to return at once. To avoid slow and expensive requests,
+# the API returns one "page" (up to the limit you set) at a time.
+#
+# nextToken is a marker that tells you there are more pages of todos.
+# - On your first request, call listTodos with a limit (e.g., 10) and either omit nextToken or set it to null.
+# - The response will include a list of todos, and possibly a nextToken string.
+#   - If nextToken is null or missing: you are done; there are no more todos.
+#   - If nextToken is a string: use it in your next call to listTodos to get the next page, using the same limit.
+#
+# nextToken is only for pagination (the next chunk of results).
+# It is not used for sorting or filtering by itself.

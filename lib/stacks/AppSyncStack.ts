@@ -93,5 +93,11 @@ export class AppSyncStack extends Stack {
       value: api.graphqlUrl,
       description: "HTTPS endpoint for AppSync GraphQL",
     });
+
+    new CfnOutput(this, "AppSyncRealtimeUrl", {
+      value: `wss://${api.apiId}.appsync-realtime-api.${this.region}.amazonaws.com/graphql`,
+      description:
+        "WebSocket endpoint for GraphQL subscriptions (use with Cognito JWT per AppSync realtime protocol)",
+    });
   }
 }

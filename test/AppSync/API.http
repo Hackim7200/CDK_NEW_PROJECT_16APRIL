@@ -1,8 +1,13 @@
 # AppSync GraphQL — REST Client / httpYac
 # Copy AppSyncGraphQlUrl from CDK outputs into @url. Use Cognito ID token (token_use=id) as @token.
+# Subscriptions (onTodoChanged) require the WebSocket URL from AppSyncRealtimeUrl — not plain POST here.
 
 @url = https://d2ajcwzd35bstjzzsevh3nzday.appsync-api.eu-west-2.amazonaws.com/graphql
+# Cognito sub (ID token `sub`) for onTodoChanged(owner); must match the signed-in user.
+@owner = a672e224-a011-70b9-09cc-8b2c66fc9337 // this is user id 
 @token = eyJraWQiOiJJMGhPS1F3RmxhUEN0bms4YTBzK0NSeXJtNDA0cVIzUlRJS1o1alBoRzkwPSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiJhNjcyZTIyNC1hMDExLTcwYjktMDljYy04YjJjNjZmYzkzMzciLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiaXNzIjoiaHR0cHM6XC9cL2NvZ25pdG8taWRwLmV1LXdlc3QtMi5hbWF6b25hd3MuY29tXC9ldS13ZXN0LTJfaXVRTERRUGdqIiwiY29nbml0bzp1c2VybmFtZSI6ImE2NzJlMjI0LWEwMTEtNzBiOS0wOWNjLThiMmM2NmZjOTMzNyIsIm9yaWdpbl9qdGkiOiI3ZWEwZWQ1Yi0xOTlkLTRhNWUtOGU5OC00ODNlMjFmZDkzYjgiLCJhdWQiOiI3NTU5cjd0dW42bHZnbWZxc2R2am5pMmRzIiwiZXZlbnRfaWQiOiIyNTg1NjZhOS1hYWViLTRhOTctYmY1Zi1lMDYwNTQ1YzZkOWQiLCJ0b2tlbl91c2UiOiJpZCIsImF1dGhfdGltZSI6MTc3NjY5OTAwNSwiZXhwIjoxNzc2NzAyNjA1LCJpYXQiOjE3NzY2OTkwMDUsImp0aSI6IjVhMDZhZDdiLTk3ODAtNDcwZC1hZmQ4LTQ4MmQyN2Q1Yzk3NCIsImVtYWlsIjoiaGlrbWF0aGFraW0uZGV2QGdtYWlsLmNvbSJ9.J3YbBWWy4IvF0izGcWclLIEU-UujmUV4lUJg2CLxBtswOaemnX7xBjwzeIM1-f3ip5QluxRIn9zwoItMOY3pNIhvhNj3SVUFHpzBStouvcNnfBqwCtXgiW2ZJbqtIPzHB-p9IeSHBTdhe7k6oNluudTQ7zgZDbwM8e9jAGwGLGzH9TuZgjP1y6vXmZ3Qp-dkErJNGb_HyKibDevuo7wF0-wCUdjQDU3NppgH1d2yKHMJEegRycVowY_nQIsNntB4WzLzGbb5ElQ5rgc7-HftefGSusJusjgqZDt6HS1M_1bXZnmcDYP6GioonM1XUoQ-pnnink0CpEKJyZW8hh5XrQ
+
+# Subscription over WSS (not POST): subscription OnTodoChanged($owner: String!) { onTodoChanged(owner: $owner) { id title description isCompleted owner createdAt updatedAt } }
 
 ### Create todo
 POST {{url}}
@@ -75,6 +80,6 @@ Authorization: Bearer {{token}}
 {
   "query": "mutation DeleteTodo($id: String!) { deleteTodo(id: $id) { id title description isCompleted owner createdAt updatedAt } }",
   "variables": {
-    "id": "00000000-0000-4000-8000-000000000000"
+    "id": "1d5c2d3f-d8b3-4ace-bd94-496f45a4eea3"
   }
 }

@@ -10,7 +10,7 @@ import { Rule, Schedule } from "aws-cdk-lib/aws-events";
 import { LambdaFunction } from "aws-cdk-lib/aws-events-targets";
 
 interface LambdaStackProps extends StackProps {
-  userItemsTable: ITable;
+  todoTable: ITable;
 }
 
 export class LambdaStack extends Stack {
@@ -22,7 +22,7 @@ export class LambdaStack extends Stack {
 
     //////////// Todos Lambda ////////////
 
-    const table = props.userItemsTable;
+    const table = props.todoTable;
 
     const todosLambda = new NodejsFunction(this, "TodosLambda", {
       runtime: Runtime.NODEJS_20_X,

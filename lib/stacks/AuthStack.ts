@@ -20,7 +20,7 @@ interface AuthStackProps extends StackProps {
 
 export class AuthStack extends Stack {
   public userPool: UserPool;
-  private userPoolClient: UserPoolClient; // public so it can be used in the WebSocketStack
+  private userPoolClient: UserPoolClient; // Shared with ApiGatewayStack and AppSyncStack
   private identityPool: CfnIdentityPool;
   private authenticatedRole: Role;
   private unAuthenticatedRole: Role;
@@ -156,7 +156,7 @@ export class AuthStack extends Stack {
     );
   }
 
-  // go to UI and you can see the role in IAM >roles > filter for authstach
+  // go to UI and you can see the role in IAM >roles > filter for authstack
   private attachRoles() {
     new CfnIdentityPoolRoleAttachment(this, "RolesAttachment", {
       identityPoolId: this.identityPool.ref,

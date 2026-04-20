@@ -1,4 +1,4 @@
-import { CfnOutput, Duration, Expiration, Stack, StackProps } from "aws-cdk-lib";
+import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import {
   AuthorizationType,
   Code,
@@ -36,15 +36,6 @@ export class AppSyncStack extends Stack {
             userPool: props.userPool,
           },
         },
-        // API key auth for local / tool testing (send header `x-api-key: <key>`).
-        additionalAuthorizationModes: [
-          {
-            authorizationType: AuthorizationType.API_KEY,
-            apiKeyConfig: {
-              expires: Expiration.after(Duration.days(365)),
-            },
-          },
-        ],
       },
       logConfig: {
         fieldLogLevel: FieldLogLevel.ALL,
@@ -98,13 +89,9 @@ export class AppSyncStack extends Stack {
       code: Code.fromAsset(path.join(todoResolversDir, "deleteTodo.js")),
     });
 
-    new CfnOutput(this, "AppSyncGraphqlUrl", {
+    new CfnOutput(this, "AppSyncGraphQlUrl", {
       value: api.graphqlUrl,
-      description: "AppSync GraphQL HTTPS endpoint",
-    });
-    new CfnOutput(this, "AppSyncApiKey", {
-      value: api.apiKey ?? "",
-      description: "AppSync API key for testing (x-api-key header)",
+      description: "HTTPS endpoint for AppSync GraphQL",
     });
   }
 }

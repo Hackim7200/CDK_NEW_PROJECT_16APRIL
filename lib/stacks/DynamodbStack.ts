@@ -19,8 +19,7 @@ export class DynamodbStack extends Stack {
 
     const { appName } = props;
 
-
-    //Todos Table
+    // Todos table
     this.todoTable = new DynamoDBTable(this, `${appName}-TodosTable`, {
       partitionKey: {
         name: "PK",
@@ -32,9 +31,5 @@ export class DynamodbStack extends Stack {
       },
       tableName: `${appName}-Todos`,
     });
-
-
-    
   }
-  
 }

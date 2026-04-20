@@ -40,7 +40,7 @@ export async function postTodo(
   );
 
   // Item: {// this is the marshal format which the db understands and it needs to be provided like so
-  //   id: { S: randomId }, // these properties are defined in the DataStack.ts file that is why we are providing it
+  //   id: { S: randomId }, // these properties are defined in the DynamoDB table / TodoModel that is why we are providing it
   //   title: { S: item.title },
   //   year: { N: item.year },
   // },

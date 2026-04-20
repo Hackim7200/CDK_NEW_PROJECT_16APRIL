@@ -22,11 +22,11 @@ export class ApiGatewayStack extends Stack {
   constructor(scope: Construct, id: string, props: ApiGatewayStackProps) {
     super(scope, id, props);
 
-    const api = new RestApi(this, `${props.appName}Api`); // Create a REST API named CountdownApi.
+    const api = new RestApi(this, `${props.appName}-Api`);
 
     const authorizer = new CognitoUserPoolsAuthorizer(
       this,
-      `${props.appName}ApiAuthorizer`,
+      `${props.appName}-ApiAuthorizer`,
       {
         cognitoUserPools: [props.userPool],
         identitySource: "method.request.header.Authorization",

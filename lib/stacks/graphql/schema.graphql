@@ -1,39 +1,39 @@
 type Query {
-	getTodo(id: String!): Todo! @aws_api_key @aws_cognito_user_pools
-	listTodos(limit: Int, nextToken: String): PaginatedTodos!
-		@aws_api_key @aws_cognito_user_pools
+  getTodo(id: String!): Todo! @aws_cognito_user_pools
+  listTodos(limit: Int, nextToken: String): PaginatedTodos!
+    @aws_cognito_user_pools
 }
 
 type Mutation {
-	createTodo(input: CreateTodoInput!): Todo! @aws_api_key @aws_cognito_user_pools
-	updateTodo(input: UpdateTodoInput!): Todo! @aws_api_key @aws_cognito_user_pools
-	deleteTodo(id: String!): Todo! @aws_api_key @aws_cognito_user_pools
+  createTodo(input: CreateTodoInput!): Todo! @aws_cognito_user_pools
+  updateTodo(input: UpdateTodoInput!): Todo! @aws_cognito_user_pools
+  deleteTodo(id: String!): Todo! @aws_cognito_user_pools
 }
 
 input CreateTodoInput {
-	title: String!
-	description: String!
-	isCompleted: Boolean!
+  title: String!
+  description: String!
+  isCompleted: Boolean!
 }
 
 input UpdateTodoInput {
-	id: ID!
-	title: String!
-	description: String!
-	isCompleted: Boolean!
+  id: ID!
+  title: String!
+  description: String!
+  isCompleted: Boolean!
 }
 
 type Todo {
-	id: ID!
-	title: String!
-	description: String!
-	isCompleted: Boolean!
-	owner: String!
-	createdAt: AWSDateTime!
-	updatedAt: AWSDateTime!
+  id: ID!
+  title: String!
+  description: String!
+  isCompleted: Boolean!
+  owner: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
 }
 
 type PaginatedTodos {
-	todos: [Todo!]!
-	nextToken: String
+  todos: [Todo!]!
+  nextToken: String
 }

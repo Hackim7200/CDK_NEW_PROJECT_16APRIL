@@ -1,0 +1,23 @@
+{
+  "AuthStack-PomodoroPlans": {
+    "UserPoolClientId": "7559r7tun6lvgmfqsdvjni2ds",
+    "UserPoolId": "eu-west-2_iuQLDQPgj",
+    "ExportsOutputRefPomodoroPlansUserPool5B3941FE787A23B1": "eu-west-2_iuQLDQPgj",
+    "IdentityPoolId": "eu-west-2:aa61fcf2-d366-44dd-9f5b-e99f9878687c",
+    "ExportsOutputFnGetAttPomodoroPlansUserPool5B3941FEArn4F29250B": "arn:aws:cognito-idp:eu-west-2:759135634975:userpool/eu-west-2_iuQLDQPgj"
+  },
+  "DynamodbStack-PomodoroPlans": {
+    "ExportsOutputRefPomodoroPlansTodosTable25BA654B44DE1D2D": "PomodoroPlans-Todos",
+    "ExportsOutputFnGetAttPomodoroPlansTodosTable25BA654BArn9547CF91": "arn:aws:dynamodb:eu-west-2:759135634975:table/PomodoroPlans-Todos"
+  },
+  "LambdaStack-PomodoroPlans": {
+    "ExportsOutputFnGetAttProfileLambda07E68A3EArnC67F9DC7": "arn:aws:lambda:eu-west-2:759135634975:function:LambdaStack-PomodoroPlans-ProfileLambda07E68A3E-aWpzjhoodM6X",
+    "ExportsOutputFnGetAttTodosLambdaD044F98AArn54AE6F97": "arn:aws:lambda:eu-west-2:759135634975:function:LambdaStack-PomodoroPlans-TodosLambdaD044F98A-En66AsAG0Rm1"
+  },
+  "AppSyncStack-PomodoroPlans": {
+    "AppSyncGraphQlUrl": "https://d2ajcwzd35bstjzzsevh3nzday.appsync-api.eu-west-2.amazonaws.com/graphql"
+  },
+  "ApiGatewayStack-PomodoroPlans": {
+    "PomodoroPlansApiEndpoint49FC0BC9": "https://j895lge6rh.execute-api.eu-west-2.amazonaws.com/prod/"
+  }
+}

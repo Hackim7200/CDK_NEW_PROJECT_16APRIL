@@ -17,14 +17,14 @@ const appName = `PomodoroPlans`;
 
 const auth = new AuthStack(app, `AuthStack-${appName}`, { env, appName });
 
-const dynamodb = new DynamodbStack(app, `DynamoDBStack-${appName}`, {
+const dynamodb = new DynamodbStack(app, `DynamodbStack-${appName}`, {
   env,
   appName,
 });
 
 const lambdas = new LambdaStack(app, `LambdaStack-${appName}`, {
   env,
-  userItemsTable: dynamodb.todoTable,
+  todoTable: dynamodb.todoTable,
 });
 
 const apiGateway = new ApiGatewayStack(app, `ApiGatewayStack-${appName}`, {
